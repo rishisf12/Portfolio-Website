@@ -1,0 +1,42 @@
+# ============ BACKEND ============
+backend/venv/
+backend/__pycache__/
+backend/*.pyc
+backend/*.pyo
+backend/*.pyd
+backend/.env
+backend/*.log
+backend/*.db
+backend/*.sqlite3
+
+# ============ FRONTEND ============
+frontend/node_modules/
+frontend/dist/
+frontend/dist-ssr/
+frontend/.env
+frontend/.env.local
+frontend/.env.production
+frontend/*.log
+frontend/*.cache
+
+# ============ IDE ============
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# ============ OS ============
+.DS_Store
+Thumbs.db
+*.log
+
+# ============ OTHER ============
+*.db
+*.sqlite3
+*.sqlite
+.env
+.env.*
+!.env.example

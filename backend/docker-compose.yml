@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: portfolio_db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres123
+      POSTGRES_DB: portfolio_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped
+    networks:
+      - portfolio_network
+
+  adminer:
+    image: adminer:latest
+    container_name: portfolio_adminer
+    ports:
+      - "8080:8080"
+    environment:
+      ADMINER_DEFAULT_SERVER: postgres
+    restart: unless-stopped
+    networks:
+      - portfolio_network
+    depends_on:
+      - postgres
+
+volumes:
+  postgres_data:
+
+networks:
+  portfolio_network:
+    driver: bridge
