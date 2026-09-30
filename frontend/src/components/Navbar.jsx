@@ -1,45 +1,61 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Link, useLocation } from 'react-router-dom';
+
+// Hoisted outside component to prevent re-creation on every render
+const NAV_LINKS = [
+  { id: 'home', label: 'Home' },
+  { id: 'about', label: 'About' },
+  { id: 'projects', label: 'Projects' },
+  { id: 'contact', label: 'Contact' },
+];
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('home');
   const [scrolled, setScrolled] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const navRef = useRef(null);
   const location = useLocation();
-
-  const navLinks = [
-    { id: 'home', label: 'Home' },
-    { id: 'about', label: 'About' },
-    { id: 'projects', label: 'Projects' },
-    { id: 'contact', label: 'Contact' },
-  ];
 
   // Check if we're on the admin page
   const isAdminPage = location.pathname.startsWith('/admin');
 
+  // Initialize auth state from localStorage on mount
   useEffect(() => {
-    const handleScroll = () => {
-      // Only track sections if not on admin page
-      if (isAdminPage) return;
-      
-      setScrolled(window.scrollY > 50);
+    setIsLoggedIn(!!localStorage.getItem('adminToken'));
+  }, []);
 
-      const sections = navLinks.map(link => document.getElementById(link.id));
-      const scrollPosition = window.scrollY + 100;
-
-      for (let i = sections.length - 1; i >= 0; i--) {
-        const section = sections[i];
-        if (section && section.offsetTop <= scrollPosition) {
-          setActiveSection(navLinks[i].id);
-          break;
-        }
-      }
+  // Listen for storage changes (e.g., login/logout in another tab)
+  useEffect(() => {
+    const handleStorageChange = () => {
+      setIsLoggedIn(!!localStorage.getItem('adminToken'));
     };
+    window.addEventListener('storage', handleStorageChange);
+    return () => window.removeEventListener('storage', handleStorageChange);
+  }, []);
 
-    window.addEventListener('scroll', handleScroll);
+  const handleScroll = useCallback(() => {
+    // Only track sections if not on admin page
+    if (isAdminPage) return;
+    
+    setScrolled(window.scrollY > 50);
+
+    const sections = NAV_LINKS.map(link => document.getElementById(link.id));
+    const scrollPosition = window.scrollY + 100;
+
+    for (let i = sections.length - 1; i >= 0; i--) {
+      const section = sections[i];
+      if (section && section.offsetTop <= scrollPosition) {
+        setActiveSection(NAV_LINKS[i].id);
+        break;
+      }
+    }
+  }, [isAdminPage]);
+
+  useEffect(() => {
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
-  }, [navLinks, isAdminPage]);
+  }, [handleScroll]);
 
   useEffect(() => {
     if (isOpen) {
@@ -54,8 +70,8 @@ const Navbar = () => {
 
   const scrollToSection = (id) => {
     if (isAdminPage) {
-      // If on admin page, navigate to home first
-      window.location.href = '/#${id}';
+      // If on admin page, navigate to home first (fixed template literal)
+      window.location.href = `/#${id}`;
       return;
     }
     
@@ -71,12 +87,10 @@ const Navbar = () => {
     }
   };
 
-  // Check if user is logged in
-  const isLoggedIn = !!localStorage.getItem('adminToken');
-
   const handleLogout = () => {
     localStorage.removeItem('adminToken');
     localStorage.removeItem('adminUser');
+    setIsLoggedIn(false);
     window.location.href = '/';
   };
 
@@ -127,7 +141,7 @@ const Navbar = () => {
                 >
                   {link.label}
                   {activeSection === link.id && (
-                    <span className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-1/2 h-0.5 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full"></span>
+                    <span className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-1/2 h-0.5 bg-linear-to-r from-purple-500 to-pink-500 rounded-full"></span>
                   )}
                 </button>
               ))}
@@ -218,7 +232,7 @@ const Navbar = () => {
                 onClick={() => scrollToSection(link.id)}
                 className={`w-full text-left px-4 py-3 rounded-lg transition-all duration-300 ${
                   activeSection === link.id
-                    ? 'bg-gradient-to-r from-purple-500/20 to-pink-500/20 text-white'
+                    ? 'bg-linear-to-r from-purple-500/20 to-pink-500/20 text-white'
                     : 'text-gray-400 hover:text-white hover:bg-white/5'
                 }`}
                 style={{
@@ -241,7 +255,7 @@ const Navbar = () => {
                     onClick={() => setIsOpen(false)}
                     className={`block w-full text-left px-4 py-3 rounded-lg transition-all duration-300 ${
                       location.pathname === '/admin/dashboard'
-                        ? 'bg-gradient-to-r from-purple-500/20 to-pink-500/20 text-white'
+                        ? 'bg-linear-to-r from-purple-500/20 to-pink-500/20 text-white'
                         : 'text-gray-400 hover:text-white hover:bg-white/5'
                     }`}
                   >
@@ -263,7 +277,7 @@ const Navbar = () => {
                   onClick={() => setIsOpen(false)}
                   className={`block w-full text-left px-4 py-3 rounded-lg transition-all duration-300 ${
                     location.pathname === '/admin/login'
-                      ? 'bg-gradient-to-r from-purple-500/20 to-pink-500/20 text-white'
+                      ? 'bg-linear-to-r from-purple-500/20 to-pink-500/20 text-white'
                       : 'text-gray-400 hover:text-white hover:bg-white/5'
                   }`}
                 >

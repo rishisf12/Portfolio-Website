@@ -1,13 +1,17 @@
-from fastapi import APIRouter, Depends, HTTPException, status, File, UploadFile
+from fastapi import APIRouter, Depends, HTTPException, status, File, UploadFile, Query
 from sqlmodel import Session
 from typing import List
 from pydantic import BaseModel, EmailStr
+import io
+import logging
 import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 import cloudinary
 import cloudinary.uploader
 import cloudinary.api
+
+logger = logging.getLogger(__name__)
 
 from app.database import get_db
 from app.crud import (
@@ -28,54 +32,80 @@ cloudinary.config(
 )
 
 # ============ IMAGE UPLOAD ENDPOINT ============
+ALLOWED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/gif', 'image/webp', 'image/svg+xml', 'image/bmp']
+MAX_UPLOAD_BYTES = 5 * 1024 * 1024  # 5 MB
+
+
 @router.post("/upload-image")
 def upload_image(
     file: UploadFile = File(...),
     current_user: str = Depends(get_current_user)
 ):
     """Upload an image to Cloudinary (Admin only)"""
+    # Validate outside the try block so a rejection stays a 400 rather than
+    # being swallowed and re-reported as a 500.
+    if file.content_type not in ALLOWED_IMAGE_TYPES:
+        raise HTTPException(
+            status_code=400,
+            detail=f"File type {file.content_type} not allowed. Allowed types: {', '.join(ALLOWED_IMAGE_TYPES)}",
+        )
+
+    contents = file.file.read(MAX_UPLOAD_BYTES + 1)
+    if len(contents) > MAX_UPLOAD_BYTES:
+        raise HTTPException(
+            status_code=413,
+            detail=f"File too large. Maximum size is {MAX_UPLOAD_BYTES // (1024 * 1024)} MB",
+        )
+
     try:
-        # Validate file type
-        allowed_types = ['image/jpeg', 'image/png', 'image/gif', 'image/webp', 'image/svg+xml', 'image/bmp']
-        if file.content_type not in allowed_types:
-            raise HTTPException(
-                status_code=400, 
-                detail=f"File type {file.content_type} not allowed. Allowed types: {', '.join(allowed_types)}"
-            )
-        
-        # Upload to Cloudinary
         result = cloudinary.uploader.upload(
-            file.file,
+            io.BytesIO(contents),
             folder="portfolio/projects",
             transformation=[
                 {"width": 800, "height": 600, "crop": "limit"},
                 {"quality": "auto:good"}
             ]
         )
-        
-        return {
-            "url": result.get("secure_url"),
-            "public_id": result.get("public_id"),
-            "width": result.get("width"),
-            "height": result.get("height"),
-            "format": result.get("format"),
-            "bytes": result.get("bytes")
-        }
-        
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Upload failed: {str(e)}")
+    except HTTPException:
+        raise
+    except Exception:
+        logger.exception("Cloudinary upload failed")
+        # Do not forward the raw provider error to the client.
+        raise HTTPException(status_code=502, detail="Image upload failed")
 
-@router.delete("/delete-image/{public_id}")
+    if not result.get("secure_url"):
+        raise HTTPException(status_code=502, detail="Image upload failed")
+
+    return {
+        "url": result.get("secure_url"),
+        "public_id": result.get("public_id"),
+        "width": result.get("width"),
+        "height": result.get("height"),
+        "format": result.get("format"),
+        "bytes": result.get("bytes")
+    }
+
+
+@router.delete("/delete-image")
 def delete_image(
-    public_id: str,
+    public_id: str = Query(..., description="Cloudinary public ID, which may contain slashes"),
     current_user: str = Depends(get_current_user)
 ):
-    """Delete an image from Cloudinary (Admin only)"""
+    """Delete an image from Cloudinary (Admin only)
+
+    public_id is a query parameter because Cloudinary IDs such as
+    'portfolio/projects/abc123' cannot travel in a single path segment.
+    """
     try:
         result = cloudinary.uploader.destroy(public_id)
-        return {"message": "Image deleted successfully", "result": result}
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Delete failed: {str(e)}")
+    except Exception:
+        logger.exception("Cloudinary delete failed")
+        raise HTTPException(status_code=502, detail="Image delete failed")
+
+    if result.get("result") != "ok":
+        raise HTTPException(status_code=404, detail="Image not found")
+
+    return {"message": "Image deleted successfully"}
 
 # ============ CONTACT MANAGEMENT ============
 class ReplyEmail(BaseModel):
@@ -142,31 +172,31 @@ def admin_reply_to_contact(
         msg['To'] = reply_data.to_email
         msg['Subject'] = reply_data.subject
         
-        body = f"""
-        Hello {contact.name},
-        
-        {reply_data.message}
-        
-        Best regards,
-        John Doe
-        """
-        
+        body = f"""Hello {contact.name},
+
+{reply_data.message}
+
+Best regards,
+{settings.ADMIN_NAME}
+"""
+
         msg.attach(MIMEText(body, 'plain'))
-        
+
         with smtplib.SMTP(settings.SMTP_HOST, settings.SMTP_PORT) as server:
             server.starttls()
             server.login(settings.SMTP_USER, settings.SMTP_PASSWORD)
             server.send_message(msg)
-        
+
         mark_contact_read(db, reply_data.contact_id)
-        
+
         return {"message": "Reply sent successfully"}
-    
-    except Exception as e:
-        raise HTTPException(
-            status_code=500,
-            detail=f"Failed to send email: {str(e)}"
-        )
+
+    except HTTPException:
+        raise
+    except Exception:
+        logger.exception("Failed to send reply email")
+        # Do not leak SMTP host/credentials details to the client.
+        raise HTTPException(status_code=502, detail="Failed to send email")
 
 # ============ PROJECT MANAGEMENT ============
 @router.post("/projects", response_model=ProjectResponse, status_code=status.HTTP_201_CREATED)

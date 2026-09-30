@@ -1,14 +1,17 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { PORTFOLIO_CONFIG } from '../config/portfolio';
 
 const Footer = () => {
   const [showScrollTop, setShowScrollTop] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleScroll = () => {
       setShowScrollTop(window.scrollY > 400);
     };
 
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
@@ -17,6 +20,13 @@ const Footer = () => {
       top: 0,
       behavior: 'smooth'
     });
+  };
+
+  const scrollToContact = () => {
+    const contactSection = document.getElementById('contact');
+    if (contactSection) {
+      contactSection.scrollIntoView({ behavior: 'smooth' });
+    }
   };
 
   return (
@@ -43,12 +53,12 @@ const Footer = () => {
           e.currentTarget.style.transform = 'translateY(0)';
         }}
       >
-        <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 10l7-7m0 0l7 7m-7-7v18" />
         </svg>
       </button>
 
-      <footer className="relative bg-black/50 backdrop-blur-sm border-t border-white/10 py-12">
+      <footer className="relative bg-black/50 backdrop-blur-sm border-t border-white/10 py-12" role="contentinfo">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col items-center justify-center gap-6">
             <div className="flex items-center gap-2">
@@ -70,14 +80,33 @@ const Footer = () => {
             </div>
 
             <div className="flex space-x-6">
-              <a href="#" className="text-gray-500 hover:text-white transition-colors duration-300 text-sm">Privacy</a>
-              <a href="#" className="text-gray-500 hover:text-white transition-colors duration-300 text-sm">Terms</a>
-              <a href="#" className="text-gray-500 hover:text-white transition-colors duration-300 text-sm">Contact</a>
+              <a 
+                href={PORTFOLIO_CONFIG.social.github} 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="text-gray-500 hover:text-white transition-colors duration-300 text-sm"
+              >
+                Privacy
+              </a>
+              <a 
+                href={PORTFOLIO_CONFIG.social.github} 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="text-gray-500 hover:text-white transition-colors duration-300 text-sm"
+              >
+                Terms
+              </a>
+              <button
+                onClick={scrollToContact}
+                className="text-gray-500 hover:text-white transition-colors duration-300 text-sm cursor-pointer bg-transparent border-none p-0"
+              >
+                Contact
+              </button>
             </div>
 
             <div className="text-center">
               <p className="text-gray-500 text-sm">
-                © {new Date().getFullYear()} Rishikesh Saroj. Crafted with passion.
+                © {new Date().getFullYear()} {PORTFOLIO_CONFIG.name}. Crafted with passion.
               </p>
             </div>
           </div>

@@ -1,0 +1,18 @@
+# Frontend Development Dockerfile
+# Build: docker build -f Dockerfile.dev -t portfolio-frontend-dev .
+# Run: docker run -p 5173:5173 -v $(pwd):/app -v /app/node_modules portfolio-frontend-dev
+
+FROM node:20-alpine
+
+# Set work directory
+WORKDIR /app
+
+# Install dependencies (cached layer)
+COPY package*.json ./
+RUN npm ci
+
+# Expose Vite dev server port
+EXPOSE 5173
+
+# Run Vite dev server with host 0.0.0.0 for Docker
+CMD ["npm", "run", "dev", "--", "--host", "0.0.0.0"]

@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { adminAPI, authAPI, imageAPI } from '../api/axios';
+import { DashboardSkeleton } from '../components/Skeleton';
 
 const AdminDashboard = () => {
   const navigate = useNavigate();
@@ -9,10 +10,12 @@ const AdminDashboard = () => {
   // State for contacts
   const [contacts, setContacts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [contactsError, setContactsError] = useState('');
   
   // State for projects
   const [projects, setProjects] = useState([]);
   const [projectsLoading, setProjectsLoading] = useState(true);
+  const [projectsError, setProjectsError] = useState('');
   
   // State for modals
   const [selectedContact, setSelectedContact] = useState(null);
@@ -46,10 +49,12 @@ const AdminDashboard = () => {
   // ============ CONTACT FUNCTIONS ============
   const fetchContacts = async () => {
     try {
+      setContactsError('');
       const data = await adminAPI.getContacts();
       setContacts(data);
     } catch (error) {
       console.error('Error fetching contacts:', error);
+      setContactsError('Failed to load contacts. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -63,6 +68,7 @@ const AdminDashboard = () => {
       ));
     } catch (error) {
       console.error('Error marking as read:', error);
+      alert('Failed to mark as read. Please try again.');
     }
   };
 
@@ -111,7 +117,8 @@ const AdminDashboard = () => {
       }, 3000);
     } catch (error) {
       console.error('Error sending reply:', error);
-      alert('Failed to send reply. Please try again.');
+      const message = error.response?.data?.detail || 'Failed to send reply. Please try again.';
+      alert(message);
     } finally {
       setReplying(false);
     }
@@ -162,10 +169,12 @@ const AdminDashboard = () => {
   // ============ PROJECT FUNCTIONS ============
   const fetchProjects = async () => {
     try {
+      setProjectsError('');
       const data = await adminAPI.getAllProjects();
       setProjects(data);
     } catch (error) {
       console.error('Error fetching projects:', error);
+      setProjectsError('Failed to load projects. Please try again.');
     } finally {
       setProjectsLoading(false);
     }
@@ -248,11 +257,7 @@ const AdminDashboard = () => {
   };
 
   if (loading || projectsLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-black pt-20">
-        <div className="w-12 h-12 border-4 border-purple-500/20 border-t-purple-500 rounded-full animate-spin"></div>
-      </div>
-    );
+    return <DashboardSkeleton />;
   }
 
   return (
@@ -316,8 +321,17 @@ const AdminDashboard = () => {
             <span className="text-sm text-gray-400">{projects.length} total</span>
           </div>
           
+          {projectsError && (
+            <div className="px-4 py-3 bg-red-500/10 border-b border-red-500/30 text-red-400 text-sm flex justify-between items-center">
+              <span>{projectsError}</span>
+              <button onClick={fetchProjects} className="text-xs px-3 py-1 bg-red-500/20 hover:bg-red-500/30 rounded transition-colors">
+                Retry
+              </button>
+            </div>
+          )}
+          
           <div className="divide-y divide-white/10">
-            {projects.length === 0 ? (
+            {projects.length === 0 && !projectsError ? (
               <div className="p-8 text-center text-gray-400">
                 No projects yet. Click "Add Project" to create one.
               </div>
@@ -393,8 +407,17 @@ const AdminDashboard = () => {
             </span>
           </div>
           
+          {contactsError && (
+            <div className="px-4 py-3 bg-red-500/10 border-b border-red-500/30 text-red-400 text-sm flex justify-between items-center">
+              <span>{contactsError}</span>
+              <button onClick={fetchContacts} className="text-xs px-3 py-1 bg-red-500/20 hover:bg-red-500/30 rounded transition-colors">
+                Retry
+              </button>
+            </div>
+          )}
+          
           <div className="divide-y divide-white/10">
-            {contacts.length === 0 ? (
+            {contacts.length === 0 && !contactsError ? (
               <div className="p-8 text-center text-gray-400">
                 No messages yet
               </div>

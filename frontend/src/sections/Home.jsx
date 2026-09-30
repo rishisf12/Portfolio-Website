@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { PORTFOLIO_CONFIG } from '../config/portfolio';
 
 const Home = () => {
   const [displayText, setDisplayText] = useState('');
@@ -132,7 +133,7 @@ const Home = () => {
                 animation: 'gradientShift 6s ease infinite'
               }}
             >
-              Rishikesh Saroj
+              {PORTFOLIO_CONFIG.name}
             </span>
           </h1>
           

@@ -1,0 +1,19 @@
+# Frontend .dockerignore
+node_modules/
+dist/
+dist-ssr/
+.env
+.env.*
+*.log
+*.cache
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+.git/
+.github/
+*.md
+!README.md

@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { projectsAPI } from '../api/axios';
+import { ProjectCardSkeleton } from '../components/Skeleton';
 
 const Projects = () => {
   const sectionRef = useRef(null);
@@ -48,9 +49,16 @@ const Projects = () => {
   if (loading) {
     return (
       <section id="projects" className="py-20 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto text-center">
-          <div className="inline-block w-12 h-12 border-4 border-purple-500/20 border-t-purple-500 rounded-full animate-spin"></div>
-          <p className="text-gray-400 mt-4">Loading projects...</p>
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-12">
+            <Skeleton className="h-10 w-64 mx-auto rounded" />
+            <Skeleton className="h-4 w-48 mx-auto rounded mt-2" />
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {[...Array(3)].map((_, i) => (
+              <ProjectCardSkeleton key={i} />
+            ))}
+          </div>
         </div>
       </section>
     );
@@ -60,7 +68,17 @@ const Projects = () => {
     return (
       <section id="projects" className="py-20 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto text-center">
-          <p className="text-red-400">{error}</p>
+          <div className="p-8 rounded-2xl bg-red-500/10 border border-red-500/30">
+            <div className="text-4xl mb-4">⚠️</div>
+            <h3 className="text-xl font-semibold text-red-400 mb-2">Failed to Load Projects</h3>
+            <p className="text-gray-400 mb-6">{error}</p>
+            <button
+              onClick={() => window.location.reload()}
+              className="px-6 py-3 rounded-lg bg-gradient-to-r from-purple-500 to-pink-500 text-white font-semibold transition-all hover:scale-105"
+            >
+              Retry
+            </button>
+          </div>
         </div>
       </section>
     );
@@ -170,9 +188,9 @@ const Projects = () => {
                         {project.description || 'No description available'}
                       </p>
                       
-                      <div className="flex gap-3">
+                      {project.live_demo_url ? (
                         <a
-                          href={project.live_demo_url || '#'}
+                          href={project.live_demo_url}
                           target="_blank"
                           rel="noopener noreferrer"
                           className="flex-1 text-center px-4 py-2 rounded-lg text-sm font-medium text-white transition-all duration-300 hover:scale-105"
@@ -183,8 +201,17 @@ const Projects = () => {
                         >
                           Live Demo
                         </a>
+                      ) : (
+                        <span className="flex-1 text-center px-4 py-2 rounded-lg text-sm font-medium text-gray-500 cursor-not-allowed" style={{
+                          background: 'rgba(255, 255, 255, 0.05)',
+                          border: '1px solid rgba(255, 255, 255, 0.1)'
+                        }}>
+                          No Demo
+                        </span>
+                      )}
+                      {project.github_url ? (
                         <a
-                          href={project.github_url || '#'}
+                          href={project.github_url}
                           target="_blank"
                           rel="noopener noreferrer"
                           className="flex-1 text-center px-4 py-2 rounded-lg text-sm font-medium text-white transition-all duration-300 hover:scale-105"
@@ -198,7 +225,14 @@ const Projects = () => {
                         >
                           GitHub
                         </a>
-                      </div>
+                      ) : (
+                        <span className="flex-1 text-center px-4 py-2 rounded-lg text-sm font-medium text-gray-500 cursor-not-allowed" style={{
+                          background: 'rgba(255, 255, 255, 0.05)',
+                          border: '1px solid rgba(255, 255, 255, 0.1)'
+                        }}>
+                          No Repo
+                        </span>
+                      )}
                     </div>
                   </div>
                 </div>

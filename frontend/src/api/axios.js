@@ -64,7 +64,10 @@ export const imageAPI = {
     return response.data;
   },
   delete: async (publicId) => {
-    const response = await api.delete(`/admin/delete-image/${publicId}`);
+    // Query param, not a path segment: Cloudinary public IDs contain slashes.
+    const response = await api.delete('/admin/delete-image', {
+      params: { public_id: publicId },
+    });
     return response.data;
   }
 };

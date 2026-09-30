@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { contactAPI } from '../api/axios';
+import { PORTFOLIO_CONFIG } from '../config/portfolio';
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -18,12 +19,12 @@ const Contact = () => {
   const sectionRef = useRef(null);
 
   const socialLinks = [
-    { name: 'GitHub', icon: '🐙', url: '#' },
-    { name: 'LinkedIn', icon: '💼', url: '#' },
-    { name: 'Twitter', icon: '🐦', url: '#' },
-    { name: 'YouTube', icon: '📺', url: '#' },
-    { name: 'Instagram', icon: '📸', url: '#' },
-    { name: 'Discord', icon: '💬', url: '#' }
+    { name: 'GitHub', icon: '🐙', url: PORTFOLIO_CONFIG.social.github },
+    { name: 'LinkedIn', icon: '💼', url: PORTFOLIO_CONFIG.social.linkedin },
+    { name: 'Twitter', icon: '🐦', url: PORTFOLIO_CONFIG.social.twitter },
+    { name: 'YouTube', icon: '📺', url: PORTFOLIO_CONFIG.social.youtube },
+    { name: 'Instagram', icon: '📸', url: PORTFOLIO_CONFIG.social.instagram },
+    { name: 'Discord', icon: '💬', url: PORTFOLIO_CONFIG.social.discord }
   ];
 
   useEffect(() => {

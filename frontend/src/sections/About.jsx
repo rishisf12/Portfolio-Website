@@ -70,7 +70,7 @@ const About = () => {
             <div className="animate-on-scroll opacity-0 translate-y-10 transition-all duration-700">
               <p className="text-gray-300 leading-relaxed">
                 I believe in writing clean, maintainable code and continuously learning new technologies. 
-                Currently exploring <span className="text-blue-400 font-semibold">Machine Learning and DeepLearing</span>  to expand my skill set.
+                Currently exploring <span className="text-blue-400 font-semibold">Machine Learning and Deep Learning</span> to expand my skill set.
               </p>
             </div>
 
@@ -112,10 +112,11 @@ const About = () => {
                 <div className="absolute inset-0 bg-gradient-to-br from-purple-500/20 to-pink-500/20"></div>
                 <div className="absolute inset-0 flex items-center justify-center bg-gray-800/50 backdrop-blur-sm">
                   <div className="text-center text-gray-400">
-                    <svg className="w-24 h-24 mx-auto mb-4 text-purple-500/50" fill="currentColor" viewBox="0 0 24 24">
+                    <svg className="w-24 h-24 mx-auto mb-4 text-purple-500/50" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                       <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/>
                     </svg>
                     <span className="text-sm">Profile Image</span>
+                    <p className="text-xs text-gray-500 mt-1">Add your photo in About.jsx</p>
                   </div>
                 </div>
               </div>

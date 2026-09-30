@@ -1,12 +1,13 @@
-from pydantic import BaseModel, EmailStr, validator
+from pydantic import BaseModel, EmailStr, Field, validator
 from datetime import datetime
 from typing import Optional, List
 
 # ============ CONTACT SCHEMAS ============
 class ContactBase(BaseModel):
-    name: str
-    email: EmailStr
-    message: str
+    # Bounds match the column widths in models.py and cap anonymous input.
+    name: str = Field(min_length=1, max_length=100)
+    email: EmailStr = Field(max_length=100)
+    message: str = Field(min_length=1, max_length=5000)
 
 class ContactCreate(ContactBase):
     pass
