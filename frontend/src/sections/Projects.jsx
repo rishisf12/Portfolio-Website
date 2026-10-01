@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { projectsAPI } from '../api/axios';
-import { ProjectCardSkeleton } from '../components/Skeleton';
+import { Skeleton, ProjectCardSkeleton } from '../components/Skeleton';
 
 const Projects = () => {
   const sectionRef = useRef(null);

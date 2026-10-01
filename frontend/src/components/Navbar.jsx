@@ -129,7 +129,7 @@ const Navbar = () => {
 
             <div className="hidden md:flex items-center space-x-1">
               {/* Only show nav links if not on admin page */}
-              {!isAdminPage && navLinks.map((link) => (
+              {!isAdminPage && NAV_LINKS.map((link) => (
                 <button
                   key={link.id}
                   onClick={() => scrollToSection(link.id)}
@@ -226,7 +226,7 @@ const Navbar = () => {
         <div className="flex flex-col h-full pt-20 px-6">
           <div className="flex-1 space-y-2">
             {/* Mobile Nav Links */}
-            {!isAdminPage && navLinks.map((link, index) => (
+            {!isAdminPage && NAV_LINKS.map((link, index) => (
               <button
                 key={link.id}
                 onClick={() => scrollToSection(link.id)}
