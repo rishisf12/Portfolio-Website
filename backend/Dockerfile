@@ -13,4 +13,4 @@ RUN mkdir -p uploads
 
 EXPOSE 10000
 
-CMD ["sh", "-c", "alembic upgrade head && uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-10000}"]
+CMD ["sh", "-c", "DB=$(python fix_db_url.py) && export DATABASE_URL=\"$DB\" && alembic upgrade head && uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-10000}"]
