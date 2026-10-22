@@ -7,6 +7,6 @@
     { "src": "/(.*)", "dest": "/index.html" }
   ],
   "env": {
-    "VITE_API_URL": "@vite_api_url"
+    "VITE_API_URL": "https://portfolio-api-rishisf13.vercel.app"
   }
 }
