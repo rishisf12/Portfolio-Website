@@ -7,7 +7,7 @@ const Home = () => {
   const [loopNum, setLoopNum] = useState(0);
   const [typingSpeed, setTypingSpeed] = useState(100);
 
-  const words = ['Developer', 'Designer', 'Creator', 'Problem Solver'];
+  const words = ['AI/ML Engineer', 'Full Stack Developer', 'Mechanical Engineering Student', 'Problem Solver'];
 
   useEffect(() => {
     const handleTyping = () => {
@@ -118,7 +118,7 @@ const Home = () => {
               border: '1px solid rgba(255, 255, 255, 0.1)'
             }}
           >
-            👋 Welcome to my portfolio
+            🎓 Mechanical Engineering @ IIITDM Jabalpur | Expected 2028
           </div>
           
           <h1 className="text-5xl sm:text-6xl lg:text-7xl font-extrabold mb-4">
@@ -157,8 +157,9 @@ const Home = () => {
           </div>
           
           <p className="text-lg text-gray-300 max-w-2xl mx-auto mb-8 leading-relaxed">
-            I craft beautiful digital experiences with modern web technologies. 
-            Passionate about creating clean, responsive, and user-friendly applications.
+            Mechanical engineering undergraduate building ML-powered applications end-to-end: 
+            Scikit-learn & OCR + LLM pipelines served through FastAPI, PostgreSQL & React. 
+            Seeking AI/ML or Software Engineering internship opportunities.
           </p>
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center">

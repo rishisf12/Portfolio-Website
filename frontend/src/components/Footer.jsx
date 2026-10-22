@@ -76,7 +76,7 @@ const Footer = () => {
                 RS
               </span>
               <span className="text-gray-600 text-2xl">·</span>
-              <span className="text-gray-400 font-light">Rishikesh Saroj</span>
+              <span className="text-gray-400 font-light">{PORTFOLIO_CONFIG.name}</span>
             </div>
 
             <div className="flex space-x-6">
@@ -86,15 +86,15 @@ const Footer = () => {
                 rel="noopener noreferrer"
                 className="text-gray-500 hover:text-white transition-colors duration-300 text-sm"
               >
-                Privacy
+                GitHub
               </a>
               <a 
-                href={PORTFOLIO_CONFIG.social.github} 
+                href={PORTFOLIO_CONFIG.social.linkedin} 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="text-gray-500 hover:text-white transition-colors duration-300 text-sm"
               >
-                Terms
+                LinkedIn
               </a>
               <button
                 onClick={scrollToContact}
@@ -106,7 +106,7 @@ const Footer = () => {
 
             <div className="text-center">
               <p className="text-gray-500 text-sm">
-                © {new Date().getFullYear()} {PORTFOLIO_CONFIG.name}. Crafted with passion.
+                © {new Date().getFullYear()} {PORTFOLIO_CONFIG.name}. Mechanical Engineering @ IIITDM Jabalpur. Built with passion.
               </p>
             </div>
           </div>

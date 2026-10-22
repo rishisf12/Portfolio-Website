@@ -1,19 +1,20 @@
 // Portfolio configuration - update these values for your portfolio
 export const PORTFOLIO_CONFIG = {
   name: 'Rishikesh Saroj',
-  title: 'Full Stack Developer',
-  email: 'rishikesh@example.com',
-  location: 'India',
+  title: 'AI/ML & Full Stack Developer',
+  email: 'rishisf120@gmail.com',
+  phone: '+91 8299885894',
+  location: 'Jabalpur, Madhya Pradesh',
   social: {
     github: 'https://github.com/rishisf12',
-    linkedin: 'https://linkedin.com/in/rishikeshsaroj',
-    twitter: 'https://twitter.com/rishikeshsaroj',
-    youtube: 'https://youtube.com/@rishikeshsaroj',
-    instagram: 'https://instagram.com/rishikeshsaroj',
-    discord: 'https://discord.gg/rishikesh'
+    linkedin: 'https://linkedin.com/in/rishisf12',
+    twitter: 'https://twitter.com/rishisf12',
+    youtube: '',
+    instagram: '',
+    discord: ''
   },
   seo: {
-    siteUrl: 'https://rishikeshsaroj.dev',
+    siteUrl: 'https://rishisf12.github.io',
     ogImage: '/og-image.jpg'
   }
 };

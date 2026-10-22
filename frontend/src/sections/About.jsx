@@ -4,13 +4,46 @@ const About = () => {
   const sectionRef = useRef(null);
 
   const skills = [
-    { name: 'ReactJs with Vite', color: 'from-blue-500 to-cyan-400' },
-    { name: 'TailwindCss', color: 'from-green-500 to-emerald-400' },
-    { name: 'Python', color: 'from-blue-600 to-indigo-400' },
-    { name: 'FastAPI', color: 'from-green-600 to-lime-400' },
-    { name: 'SQLModel', color: 'from-yellow-500 to-orange-400' },
-    { name: 'Docker', color: 'from-blue-400 to-sky-300' },
-    
+    { category: 'Languages', items: ['Python (Primary)', 'JavaScript', 'SQL'] },
+    { category: 'ML & AI', items: ['Scikit-learn', 'OpenCV', 'Tesseract OCR', 'Hugging Face (LLMs)', 'Pandas', 'NumPy', 'Matplotlib'] },
+    { category: 'Backend', items: ['FastAPI', 'REST APIs', 'SQLModel', 'PostgreSQL', 'Alembic', 'Docker', 'pytest'] },
+    { category: 'Frontend & Tools', items: ['React', 'Vite', 'Tailwind CSS', 'Recharts', 'Git/GitHub'] },
+  ];
+
+  const education = [
+    {
+      degree: 'B.Tech, Mechanical Engineering',
+      institution: 'PDPM IIITDM Jabalpur, Madhya Pradesh',
+      year: 'Expected 2028',
+      cpi: 'CPI: 6.9'
+    },
+    {
+      degree: 'Class XII',
+      institution: '',
+      year: '',
+      cpi: '80%'
+    },
+    {
+      degree: 'Class X',
+      institution: '',
+      year: '',
+      cpi: '92%'
+    }
+  ];
+
+  const achievements = [
+    {
+      title: 'Smart India Hackathon 2026',
+      description: 'Team of 6; proposed SkyGuard AI (SIH26073), an Isolation Forest + SHAP anomaly-detection system to separate genuine weather events from sensor faults in Automatic Weather Stations.',
+    },
+    {
+      title: 'Patent (Filed)',
+      description: 'Co-inventor, Indian patent application no. 202621096766 A, adjustable hybrid welding device with integrated safety measures.',
+    },
+    {
+      title: 'Jagrati Volunteer',
+      description: 'Teach underprivileged village children every evening and help plan the student-run initiative\'s daily activities.',
+    }
   ];
 
   useEffect(() => {
@@ -37,8 +70,8 @@ const About = () => {
   return (
     <section id="about" ref={sectionRef} className="py-20 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
-        <div className="grid lg:grid-cols-2 gap-12 items-center">
-          <div className="space-y-6">
+        <div className="grid lg:grid-cols-2 gap-12 items-start">
+          <div className="space-y-8">
             <div className="animate-on-scroll opacity-0 translate-y-10 transition-all duration-700">
               <h2 className="text-4xl sm:text-5xl font-extrabold mb-2">
                 About <span 
@@ -59,40 +92,51 @@ const About = () => {
             </div>
 
             <div className="animate-on-scroll opacity-0 translate-y-10 transition-all duration-700">
+              <p className="text-gray-300 leading-relaxed mb-4">
+                I'm a <span className="text-purple-400 font-semibold">Mechanical Engineering undergraduate</span> at IIITDM Jabalpur 
+                who builds <span className="text-pink-400 font-semibold">ML-powered applications end-to-end</span>.
+              </p>
+              <p className="text-gray-300 leading-relaxed mb-4">
+                My stack: <span className="text-blue-400 font-semibold">Scikit-learn</span>, <span className="text-blue-400 font-semibold">OCR + LLM pipelines</span> 
+                (Tesseract, Hugging Face), served through <span className="text-green-400 font-semibold">FastAPI</span>, 
+                <span className="text-green-400 font-semibold">PostgreSQL</span> & <span className="text-cyan-400 font-semibold">React</span>.
+              </p>
               <p className="text-gray-300 leading-relaxed">
-                I'm a passionate <span className="text-purple-400 font-semibold">Full Stack Developer</span> 
-                with expertise in building modern web applications. With a strong foundation in 
-                <span className="text-pink-400 font-semibold"> Python</span> .
-                I specialize in creating responsive, performant, and visually stunning user interfaces.
+                Currently learning <span className="text-orange-400 font-semibold">React Native</span> to bring campus tools to mobile for 1,500+ students. 
+                Seeking <span className="text-yellow-400 font-semibold">AI/ML or Software Engineering internship</span> opportunities.
               </p>
             </div>
 
+            {/* Education */}
             <div className="animate-on-scroll opacity-0 translate-y-10 transition-all duration-700">
-              <p className="text-gray-300 leading-relaxed">
-                I believe in writing clean, maintainable code and continuously learning new technologies. 
-                Currently exploring <span className="text-blue-400 font-semibold">Machine Learning and Deep Learning</span> to expand my skill set.
-              </p>
+              <h3 className="text-xl font-bold text-white mb-4">Education</h3>
+              <div className="space-y-4">
+                {education.map((edu, index) => (
+                  <div key={index} className="p-4 rounded-xl bg-white/5 border border-white/10">
+                    <div className="flex justify-between items-start">
+                      <div>
+                        <h4 className="font-semibold text-white">{edu.degree}</h4>
+                        {edu.institution && <p className="text-gray-400 text-sm">{edu.institution}</p>}
+                      </div>
+                      <div className="text-right">
+                        {edu.year && <p className="text-purple-400 text-sm font-medium">{edu.year}</p>}
+                        <p className="text-gray-400 text-sm">{edu.cpi}</p>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
 
-            <div className="animate-on-scroll opacity-0 translate-y-10 transition-all duration-700 pt-4">
-              <div className="flex flex-wrap gap-3">
-                {skills.map((skill, index) => (
-                  <span
-                    key={skill.name}
-                    className={`px-4 py-2 rounded-full text-sm font-medium bg-gradient-to-r ${skill.color} bg-opacity-20 text-white border border-white/10 transition-all duration-300 hover:scale-105`}
-                    style={{
-                      animationDelay: `${index * 50}ms`,
-                      boxShadow: '0 0 20px rgba(139, 92, 246, 0.1)'
-                    }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.boxShadow = '0 0 30px rgba(139, 92, 246, 0.3)';
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.boxShadow = '0 0 20px rgba(139, 92, 246, 0.1)';
-                    }}
-                  >
-                    {skill.name}
-                  </span>
+            {/* Achievements */}
+            <div className="animate-on-scroll opacity-0 translate-y-10 transition-all duration-700">
+              <h3 className="text-xl font-bold text-white mb-4">Achievements</h3>
+              <div className="space-y-3">
+                {achievements.map((ach, index) => (
+                  <div key={index} className="p-4 rounded-xl bg-white/5 border border-white/10 border-l-4 border-l-purple-500">
+                    <h4 className="font-semibold text-white mb-1">{ach.title}</h4>
+                    <p className="text-gray-400 text-sm">{ach.description}</p>
+                  </div>
                 ))}
               </div>
             </div>
@@ -121,6 +165,38 @@ const About = () => {
                 </div>
               </div>
             </div>
+          </div>
+        </div>
+
+        {/* Skills Section - Full Width */}
+        <div className="mt-16 animate-on-scroll opacity-0 translate-y-10 transition-all duration-700">
+          <h3 className="text-2xl font-bold text-white mb-6 text-center">Technical Skills</h3>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {skills.map((skillGroup, groupIndex) => (
+              <div key={skillGroup.category} className="p-6 rounded-2xl bg-white/5 border border-white/10" style={{ animationDelay: `${groupIndex * 100}ms` }}>
+                <h4 className="text-purple-400 font-semibold mb-3 border-b border-white/10 pb-2">{skillGroup.category}</h4>
+                <div className="flex flex-wrap gap-2">
+                  {skillGroup.items.map((skill, skillIndex) => (
+                    <span
+                      key={skill}
+                      className="px-3 py-1.5 rounded-full text-xs font-medium bg-gradient-to-r from-purple-500/20 to-pink-500/20 text-white border border-white/10 transition-all duration-300 hover:scale-105"
+                      style={{
+                        animationDelay: `${skillIndex * 50}ms`,
+                        boxShadow: '0 0 15px rgba(139, 92, 246, 0.1)'
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.boxShadow = '0 0 25px rgba(139, 92, 246, 0.3)';
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.boxShadow = '0 0 15px rgba(139, 92, 246, 0.1)';
+                      }}
+                    >
+                      {skill}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </div>

@@ -22,9 +22,8 @@ const Contact = () => {
     { name: 'GitHub', icon: '🐙', url: PORTFOLIO_CONFIG.social.github },
     { name: 'LinkedIn', icon: '💼', url: PORTFOLIO_CONFIG.social.linkedin },
     { name: 'Twitter', icon: '🐦', url: PORTFOLIO_CONFIG.social.twitter },
-    { name: 'YouTube', icon: '📺', url: PORTFOLIO_CONFIG.social.youtube },
-    { name: 'Instagram', icon: '📸', url: PORTFOLIO_CONFIG.social.instagram },
-    { name: 'Discord', icon: '💬', url: PORTFOLIO_CONFIG.social.discord }
+    { name: 'Email', icon: '📧', url: `mailto:${PORTFOLIO_CONFIG.email}` },
+    { name: 'Phone', icon: '📞', url: `tel:${PORTFOLIO_CONFIG.phone}` },
   ];
 
   useEffect(() => {
@@ -114,7 +113,8 @@ const Contact = () => {
           </h2>
           <div className="w-20 h-1 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full mx-auto"></div>
           <p className="text-gray-400 mt-4 max-w-2xl mx-auto">
-            Have a question or want to work together? Feel free to reach out!
+            Have a question or want to work together? Feel free to reach out! 
+            I'm currently seeking AI/ML or Software Engineering internship opportunities.
           </p>
         </div>
 
@@ -148,6 +148,13 @@ const Contact = () => {
                   </div>
                 </a>
               ))}
+            </div>
+            
+            <div className="mt-8 p-6 rounded-2xl bg-gradient-to-r from-purple-500/10 to-pink-500/10 border border-purple-500/30">
+              <h4 className="font-semibold text-white mb-2">📍 Location</h4>
+              <p className="text-gray-400">{PORTFOLIO_CONFIG.location}</p>
+              <h4 className="font-semibold text-white mb-2 mt-4">🎓 Education</h4>
+              <p className="text-gray-400">B.Tech Mechanical Engineering, IIITDM Jabalpur (Expected 2028)</p>
             </div>
           </div>
 
