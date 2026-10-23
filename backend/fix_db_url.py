@@ -1,7 +1,8 @@
 import os, sys
 from urllib.parse import urlparse, quote, unquote
 
-POOLER_HOST = os.environ.get("SUPABASE_POOLER_HOST", "aws-0-ap-south-1.pooler.supabase.com")
+# Use the specific pooler host from the user's new Supabase project
+POOLER_HOST = os.environ.get("SUPABASE_POOLER_HOST", "aws-0-ap-northeast-1.pooler.supabase.com")
 
 source = "DB_URL_POOLER" if os.environ.get("DB_URL_POOLER") else "DATABASE_URL"
 raw = os.environ.get(source, "").strip().strip('"').strip("'")
