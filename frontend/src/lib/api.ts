@@ -1,21 +1,32 @@
 import axios from "axios";
 
-const API_URL = import.meta.env.VITE_API_URL || "http://localhost:8000";
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:9002";
+export const API_ORIGIN = API_URL.replace(/\/$/, "");
 
 export const api = axios.create({
   baseURL: API_URL,
-  headers: {
-    "Content-Type": "application/json",
-  },
+  headers: { "Content-Type": "application/json" },
   withCredentials: true,
 });
 
-// Attach JWT from cookie-based auth is handled by backend HttpOnly cookie.
-// Axios sends cookies automatically with withCredentials: true.
+api.interceptors.request.use((config) => {
+  const token = localStorage.getItem("admin_token");
+  if (token) {
+    config.headers = config.headers ?? {};
+    (config.headers as Record<string, string>)["X-Admin-Token"] = token;
+  }
+  return config;
+});
+
+export const assetUrl = (url?: string | null) => {
+  if (!url) return "";
+  if (/^https?:\/\//.test(url)) return url;
+  if (url.startsWith("/projects/")) return url;
+  return `${API_ORIGIN}${url}`;
+};
 
 export const authApi = {
-  login: (username: string, password: string) =>
-    api.post("/auth/login", { username, password }),
+  login: (username: string, password: string) => api.post("/auth/login", { username, password }),
   me: () => api.get("/auth/me"),
 };
 
@@ -32,14 +43,19 @@ export const publicApi = {
 };
 
 export const adminApi = {
+  stats: () => api.get("/admin/stats"),
+
   projects: () => api.get("/admin/projects"),
   createProject: (data: any) => api.post("/admin/projects", data),
   updateProject: (id: number, data: any) => api.patch(`/admin/projects/${id}`, data),
   deleteProject: (id: number) => api.delete(`/admin/projects/${id}`),
-  uploadImage: (projectId: number, formData: FormData) =>
-    api.post(`/admin/projects/${project_id || projectId}/images`, formData, {
+  uploadImage: (projectId: number, file: File) => {
+    const formData = new FormData();
+    formData.append("file", file);
+    return api.post(`/admin/projects/${projectId}/images`, formData, {
       headers: { "Content-Type": "multipart/form-data" },
-    }),
+    });
+  },
   deleteImage: (imageId: number) => api.delete(`/admin/project-images/${imageId}`),
 
   skills: () => api.get("/admin/skills"),
@@ -48,6 +64,7 @@ export const adminApi = {
 
   education: () => api.get("/admin/education"),
   createEducation: (data: any) => api.post("/admin/education", data),
+  updateEducation: (id: number, data: any) => api.put(`/admin/education/${id}`, data),
   deleteEducation: (id: number) => api.delete(`/admin/education/${id}`),
 
   achievements: () => api.get("/admin/achievements"),
@@ -55,6 +72,7 @@ export const adminApi = {
   deleteAchievement: (id: number) => api.delete(`/admin/achievements/${id}`),
 
   settings: () => api.get("/admin/settings"),
-  updateSetting: (key: string, value: string) =>
-    api.patch(`/admin/settings/${key}`, { key, value }),
+  updateSetting: (key: string, value: string) => api.patch(`/admin/settings/${key}`, { value }),
+
+  categories: () => api.get("/admin/categories"),
 };
