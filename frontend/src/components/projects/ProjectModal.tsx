@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { X, ExternalLink, GitHub } from "lucide-react";
+import { X, ExternalLink, Github } from "lucide-react";
 import ImageCarousel from "./ImageCarousel";
 
 interface ProjectModalProps {
@@ -60,7 +60,7 @@ export default function ProjectModal({ project, isOpen, onClose }: ProjectModalP
                   rel="noopener noreferrer"
                   className="flex items-center gap-2 px-4 py-2 border border-slate-600 dark:border-slate-400 text-slate-600 dark:text-slate-400 hover:bg-slate-600 dark:hover:bg-slate-400 hover:text-white rounded-lg text-sm font-medium transition"
                 >
-                  <GitHub size={16} /> Source
+                  <Github size={16} /> Source
                 </a>
               )}
             </div>
