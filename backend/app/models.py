@@ -56,6 +56,7 @@ class Skill(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
     name: str = Field(max_length=100)
     level: str = Field(max_length=50)  # e.g., "Advanced", "Intermediate"
+    domain: Optional[str] = Field(default=None, max_length=50, index=True)  # Frontend, Backend, ML...
     category_id: Optional[int] = Field(default=None, foreign_key="category.id")
     created_at: datetime = Field(default_factory=datetime.utcnow)
 

@@ -12,11 +12,12 @@ class Settings(BaseSettings):
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
 
     # Admin
-    ADMIN_USERNAME: str = "rishisf12"
+    ADMIN_USERNAME: str = "rishisf123"
     ADMIN_PASSWORD: str = "admin123"
+    ADMIN_TOKEN: str = "rishisf123"
 
     # CORS
-    CORS_ORIGINS: str = "http://localhost:5173,http://127.0.0.1:5173"
+    CORS_ORIGINS: str = "http://localhost:3001,http://127.0.0.1:3001"
 
     @property
     def cors_origins_list(self) -> List[str]:
